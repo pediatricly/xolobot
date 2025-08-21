@@ -39,3 +39,4 @@ Thumbs.db
 # Specifics
 .env
 venv/
+staticfiles/

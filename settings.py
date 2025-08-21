@@ -2,8 +2,22 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
+print("hey you're in what I think is xolo/settings.py")
+
+# Get the Path object for the current file
+current_file_path = Path(__file__)
+
+# Print the path (for demonstration)
+print("current file path", current_file_path)
+
+# You can also get the parent directory of the current file
+current_file_directory = current_file_path.parent
+print("current dir", current_file_directory)
+
+
 # --- Paths ---
 BASE_DIR = Path(__file__).resolve().parent.parent
+print('base_dir', BASE_DIR)
 
 # --- Load .env (only if it exists) ---
 # This lets you use a .env file locally, but it won't break production.
@@ -94,5 +108,7 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "")
 STATIC_URL = "/static/"
 #STATIC_ROOT = BASE_DIR / "staticfiles"
 #STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+print('static url', STATIC_URL)
 
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+print('static root',STATIC_ROOT)

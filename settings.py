@@ -84,13 +84,14 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
 
-# --- Static files ---
-STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
-
 # --- Default primary key ---
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # --- External keys (LangChain, etc.) ---
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "")
+
+# --- Static files ---
+STATIC_URL = "/static/"
+#STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 

@@ -35,8 +35,11 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
+*__pycache__*
 
 # Specifics
 .env
 venv/
 staticfiles/
+xolo
+xolo.service

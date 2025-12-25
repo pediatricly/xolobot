@@ -124,7 +124,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Load environment variables
 from dotenv import load_dotenv
+import os
 load_dotenv()
+load_dotenv(BASE_DIR / ".env")
 
 # Static files
 STATIC_URL = "/static/"

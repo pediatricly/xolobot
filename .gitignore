@@ -36,6 +36,7 @@
 ehthumbs.db
 Thumbs.db
 *__pycache__*
+*.swp
 
 # Specifics
 .env

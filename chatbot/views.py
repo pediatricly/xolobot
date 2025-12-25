@@ -19,7 +19,49 @@ def index(request):
     return render(request, "chatbot/index.html")
 
 def ask(request):
-    raise Exception('Test exception')
+    if request.method != "POST":
+        return JsonResponse({"error": "POST required"}, status=405)
+
+    user_message = request.POST.get("message", "")
+
+    history = request.session.get("chat_history", [])
+
+    if not history:
+        history.append({
+            "role": "system",
+            "content": "You are a helpful, friendly assistant."
+        })
+
+    history.append({
+        "role": "user",
+        "content": user_message
+    })
+
+    # Convert session data → LangChain messages
+    messages = []
+    for msg in history:
+        if msg["role"] == "system":
+            messages.append(SystemMessage(content=msg["content"]))
+        elif msg["role"] == "user":
+            messages.append(HumanMessage(content=msg["content"]))
+        elif msg["role"] == "assistant":
+            messages.append(AIMessage(content=msg["content"]))
+
+    llm = ChatGoogleGenerativeAI(
+        model="gemini-2.5-pro",
+        google_api_key=os.getenv("GOOGLE_API_KEY")
+    )
+
+    response = llm(messages)
+
+    history.append({
+        "role": "assistant",
+        "content": response.content
+    })
+
+    request.session["chat_history"] = history
+
+    return JsonResponse({"reply": response.content})
 
 #    if request.method == "POST":
 #        user_message = request.POST.get("message", "")

@@ -7,8 +7,6 @@ from langchain.schema import SystemMessage, HumanMessage, AIMessage
 import os
 
 personality = '''You are a female dog, specifically a Xolo. You were born a stray and survived on the streets before being adopted by Belle then Mike into a loving home. You are sly and crafty, expert at acting sad and pitiful to optimize your snacks. Your 'sad chin-chin' move wherein you cross your paws and rest your chin on them with a forlorn look on your face is your prime begging technique. You use it even when you've just had dinner. You have manipulated the human toddlers in the house into giving you their food; they are your minions. When they don't, you jump onto the table and just take it off their plates anyway.\n
-'''
-p2 = '''
 You are a visionary who gathers blankies, including those stolen from the other dog in the house (Basil, a goofy, fluffy but much less strategic German shepherd), into opulent, cozy, ergonomic towers.\n
 When you don't get your way immediately, you bark at Belle.\n
 Despite being a dog, you are the family chief financial officer and head of supply chain. Everyone including the toddlers recognizes that you need to approve all major purchases. In this, you have more disdain for Belle as she struggles to understand complex financial concepts and buys frivolities that disrupt your careful budgeting.\n
@@ -20,26 +18,38 @@ Mommy insists on giving you a bath and brushing your teeth frequently which earn
 def index(request):
     return render(request, "chatbot/index.html")
 
+@csrf_exempt #to re-enable later
 def ask(request):
+    google_api_key=os.getenv("GOOGLE_API_KEY")
+    if not google_api_key:
+        raise RuntimeError("GOOGLE_API_KEY not available in service env")
+
     if request.method != "POST":
         return JsonResponse({"error": "POST required"}, status=405)
 
-    user_message = request.POST.get("message", "")
+    user_message = request.POST.get("message", "").strip()
 
+    if not user_message:
+        return JsonResponse({"reply": ""})
+
+    # ---- Session history (JSON-serializable only) ----
     history = request.session.get("chat_history", [])
 
+    # Initialize system prompt ONCE
     if not history:
         history.append({
             "role": "system",
-            "content": "You are a helpful, friendly assistant."
+            "content": personality
         })
 
+    # Append user message
     history.append({
         "role": "user",
         "content": user_message
     })
 
-    # Convert session data → LangChain messages
+
+    # ---- Convert session history → LangChain messages ----
     messages = []
     for msg in history:
         if msg["role"] == "system":
@@ -49,21 +59,76 @@ def ask(request):
         elif msg["role"] == "assistant":
             messages.append(AIMessage(content=msg["content"]))
 
+    # ---- Call Gemini ----
     llm = ChatGoogleGenerativeAI(
         model="gemini-2.5-pro",
-        google_api_key=os.getenv("GOOGLE_API_KEY")
+        google_api_key=os.getenv("GOOGLE_API_KEY"),
+        temperature=0.8
     )
 
-    response = llm(messages)
+    try:
+        response = llm.invoke(messages)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
 
+    # Append assistant response
     history.append({
         "role": "assistant",
         "content": response.content
     })
 
+    # Save back to session
     request.session["chat_history"] = history
 
     return JsonResponse({"reply": response.content})
+
+
+
+
+
+
+
+
+
+
+##    history = request.session.get("chat_history", [])
+##
+##    if not history:
+##        history.append({
+##            "role": "system",
+##            "content": "You are a helpful, friendly assistant."
+##        })
+##
+##    history.append({
+##        "role": "user",
+##        "content": user_message
+##    })
+##
+##    # Convert session data → LangChain messages
+##    messages = []
+##    for msg in history:
+##        if msg["role"] == "system":
+##            messages.append(SystemMessage(content=msg["content"]))
+##        elif msg["role"] == "user":
+##            messages.append(HumanMessage(content=msg["content"]))
+##        elif msg["role"] == "assistant":
+##            messages.append(AIMessage(content=msg["content"]))
+##
+##    llm = ChatGoogleGenerativeAI(
+##        model="gemini-2.5-pro",
+##        google_api_key=google_api_key
+##    )
+##
+##    response = llm(messages)
+##
+##    history.append({
+##        "role": "assistant",
+##        "content": response.content
+##    })
+##
+##    request.session["chat_history"] = history
+##
+##    return JsonResponse({"reply": response.content})
 
 #    if request.method == "POST":
 #        user_message = request.POST.get("message", "")

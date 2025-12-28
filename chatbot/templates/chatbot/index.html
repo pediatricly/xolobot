@@ -9,12 +9,13 @@
 <div class="container">
     <div class="header">
         <img src="{% static 'chatbot/zoey.jpg' %}" alt="Zoey">
-        <h1>Zoey, CFO of the Household</h1>
+        <h1>Zoey, Strategic Visionary and Oracle</h1>
     </div>
 
     <div id="chat" class="chat"></div>
 
     <form id="chat-form">
+        {% csrf_token %}
         <input type="text" id="message" placeholder="Speak, subordinate…" autocomplete="off" />
         <button type="submit">Send</button>
     </form>
@@ -25,6 +26,21 @@ const form = document.getElementById("chat-form");
 const input = document.getElementById("message");
 const chat = document.getElementById("chat");
 const button = form.querySelector("button");
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.slice(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
 function addMessage(text, cls) {
     const div = document.createElement("div");
@@ -61,7 +77,8 @@ form.onsubmit = async (e) => {
         const res = await fetch("/ask/", {
             method: "POST",
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-CSRFToken": getCookie("csrftoken"),
             },
             body: new URLSearchParams({ message: text })
         });

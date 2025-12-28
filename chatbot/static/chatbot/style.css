@@ -34,7 +34,7 @@ h1 {
 
 .chat {
     margin-top: 20px;
-    max-height: 800px;
+    max-height: 1600px;
     overflow-y: auto;
 }
 

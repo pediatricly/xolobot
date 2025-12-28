@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 #from langchain.chat_models import ChatOpenAI
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.schema import SystemMessage, HumanMessage, AIMessage
@@ -71,7 +72,7 @@ personality = "\n\n".join([
 def index(request):
     return render(request, "chatbot/index.html")
 
-#@csrf_exempt #to re-enable later
+@csrf_exempt #to re-enable later
 def ask(request):
     google_api_key=os.getenv("GOOGLE_API_KEY")
     if not google_api_key:

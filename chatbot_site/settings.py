@@ -129,7 +129,8 @@ load_dotenv()
 # Static files
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"   # where collectstatic will dump files
-STATICFILES_DIRS = [
-    BASE_DIR / "static",  # if you also keep a local "static" dir in the repo
-]
+# STATICFILES_DIRS = [
+#    BASE_DIR / "static",  # if you also keep a local "static" dir in the repo
+# ]
 print('static root', STATIC_ROOT)
+python manage.py collectstatic

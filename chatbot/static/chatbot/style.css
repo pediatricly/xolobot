@@ -35,7 +35,7 @@ h1 {
 
 .chat {
     margin-top: 20px;
-    min-height: 400px;
+    min-height: 200px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -68,7 +68,6 @@ h1 {
 .message.bot ol,
 .message.bot li {
     background: #fff7ec;
-    border-left: 4px solid #c47a2c;
     padding: 0.75rem 1rem;
     margin-bottom: 0.75rem;
     border-radius: 6px;

@@ -104,21 +104,32 @@ def ask(request):
         "content": user_message
     })
 
-    if len(history) == 2:  # system + first user message
-        history.append({
-            "role": "assistant",
-            "content": "Understood. I am Zoey. Proceed."
-        })
-
     # ---- Convert session history → LangChain messages ----
     messages = []
+#    for msg in history:
+#        if msg["role"] == "system":
+#            messages.append(SystemMessage(content=msg["content"]))
+#        elif msg["role"] == "user":
+#            messages.append(HumanMessage(content=msg["content"]))
+#        elif msg["role"] == "assistant":
+#            messages.append(AIMessage(content=msg["content"]))
     for msg in history:
         if msg["role"] == "system":
-            messages.append(SystemMessage(content=msg["content"]))
+            messages.append(
+                HumanMessage(
+                    content=f"""SYSTEM INSTRUCTIONS (MANDATORY):
+    
+    {msg['content']}
+    
+    You must follow the above instructions exactly.
+    Acknowledge silently and proceed."""
+                )
+            )
         elif msg["role"] == "user":
             messages.append(HumanMessage(content=msg["content"]))
         elif msg["role"] == "assistant":
             messages.append(AIMessage(content=msg["content"]))
+
 
     # ---- Call Gemini ----
     llm = ChatGoogleGenerativeAI(

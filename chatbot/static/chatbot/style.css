@@ -1,0 +1,84 @@
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f6f7f9;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 700px;
+    margin: 40px auto;
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.header img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+h1 {
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+.chat {
+    margin-top: 20px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.message {
+    margin: 12px 0;
+    padding: 10px 14px;
+    border-radius: 10px;
+    line-height: 1.4;
+}
+
+.user {
+    background: #e6f0ff;
+    align-self: flex-end;
+}
+
+.bot {
+    background: #f1f1f1;
+}
+
+form {
+    display: flex;
+    margin-top: 16px;
+    gap: 10px;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+button {
+    padding: 12px 18px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: none;
+    background: #3b82f6;
+    color: white;
+    cursor: pointer;
+}
+
+button:disabled {
+    background: #aaa;
+}
+

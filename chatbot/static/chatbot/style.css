@@ -34,7 +34,7 @@ h1 {
 
 .chat {
     margin-top: 20px;
-    max-height: 400px;
+    max-height: 800px;
     overflow-y: auto;
 }
 
@@ -45,6 +45,11 @@ h1 {
     line-height: 1.4;
 }
 
+.message.bot.thinking {
+    font-style: italic;
+    opacity: 0.7;
+}
+
 .user {
     background: #e6f0ff;
     align-self: flex-end;
@@ -52,6 +57,15 @@ h1 {
 
 .bot {
     background: #f1f1f1;
+}
+
+.message.bot {
+    background: #fff7ec;
+    border-left: 4px solid #c47a2c;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
+    border-radius: 6px;
+    font-family: Georgia, serif;
 }
 
 form {

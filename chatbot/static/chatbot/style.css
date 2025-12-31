@@ -107,3 +107,24 @@ button:disabled {
     background: #aaa;
 }
 
+.back-link {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    text-decoration: none;
+    font-size: 0.95rem;
+    color: #3b82f6;
+    background: white;
+    padding: 8px 12px;
+    border-radius: 999px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    font-weight: 500;
+    transition: background 0.15s ease, transform 0.1s ease;
+    z-index: 1000;
+}
+
+.back-link:hover {
+    background: #eef4ff;
+    transform: translateX(-2px);
+}
+

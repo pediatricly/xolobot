@@ -17,7 +17,7 @@
 
     <form id="chat-form">
         {% csrf_token %}
-        <input type="text" id="message" placeholder="Speak, subordinate…" autocomplete="off" />
+        <input type="text" id="message" placeholder="What is it you seek from Zoey?" autocomplete="off" />
         <button type="submit">Send</button>
     </form>
 </div>
@@ -69,9 +69,9 @@ form.onsubmit = async (e) => {
     // 👇 Placeholder while waiting
     const thoughts = [
       "Zoey is considering your request… 🐕",
-      "Zoey is judging you…",
-      "Zoey is consulting the budget…",
-      "Zoey is sunbathing. One moment.",
+      "Zoey is judging you…🐕",
+      "Zoey is consulting the budget…🐕",
+      "Zoey is sunbathing. Please be patient.🐕",
     ];
     
     const thinking = document.createElement("div");

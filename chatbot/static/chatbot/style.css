@@ -32,6 +32,12 @@ h1 {
     font-size: 1.8rem;
 }
 
+.subtitle {
+    margin: 6px 0 0;
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.4;
+}
 
 .chat {
     margin-top: 20px;

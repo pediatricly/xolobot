@@ -78,10 +78,15 @@ def index(request):
     return render(request, "chatbot/index.html")
 
 @csrf_protect 
-@ratelimit(key='ip', rate='10/m', block=True)
+@ratelimit(key='ip', rate='10/m', block=False)
 def ask(request):
     #return JsonResponse({"reply" : "ask() reached"})
-
+    # handle rate limiting without building a 429 error
+    if getattr(request, "limited", False):
+        return JsonResponse(
+            {"reply": "Zoey has decided you’ve spoken enough."},
+            status=429
+        )
     google_api_key=os.getenv("GOOGLE_API_KEY")
     if not google_api_key:
         raise RuntimeError("GOOGLE_API_KEY not available in service env")

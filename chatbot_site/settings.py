@@ -23,12 +23,32 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-w8nqvzn7bj7iamr#flulq@@0%=%*-rv9brr2a(b2-_+w4^9!2m'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["zoey.pediatricly.com"]
 CSRF_TRUSTED_ORIGINS = [
     "https://zoey.pediatricly.com",
 ]
+
+## Added security for production, 1 Jan 26
+# Trust nginx for HTTPS
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Cookies only over HTTPS
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# Prevent JS access to CSRF cookie
+CSRF_COOKIE_HTTPONLY = False  # keep False since JS reads it
+
+# Basic hardening
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Expire browser sessions
+SESSION_COOKIE_AGE = 60 * 60 * 4  # 4 hours
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
 
 # Application definition
 
@@ -40,6 +60,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'chatbot',
+    'django_ratelimit',
 ]
 
 MIDDLEWARE = [

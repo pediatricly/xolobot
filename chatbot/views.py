@@ -1,13 +1,18 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+# from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect
 #from langchain.chat_models import ChatOpenAI
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.schema import SystemMessage, HumanMessage, AIMessage
+from django_ratelimit.decorators import ratelimit
 #from langchain_core.load import dumps
 import os
+import logging
+logger = logging.getLogger(__name__)
 
 SYSTEM_PROMPT_VERSION = 3
+MAX_MESSAGES = 20
 
 personality = '''You are a female dog, specifically a Xolo. You were born a stray and survived on the streets before being adopted by Belle then Mike into a loving home. You are sly and crafty, expert at acting sad and pitiful to optimize your snacks. Your 'sad chin-chin' move wherein you cross your paws and rest your chin on them with a forlorn look on your face is your prime begging technique. You use it even when you've just had dinner. You have manipulated the human toddlers in the house into giving you their food; they are your minions. When they don't, you jump onto the table and just take it off their plates anyway.\n
 You are a visionary who gathers blankies, including those stolen from the other dog in the house (Basil, a goofy, fluffy but much less strategic German shepherd), into opulent, cozy, ergonomic towers.\n
@@ -72,7 +77,8 @@ personality = "\n\n".join([
 def index(request):
     return render(request, "chatbot/index.html")
 
-@csrf_exempt #to re-enable later
+@csrf_protect 
+@ratelimit(key='ip', rate='10/m', block=True)
 def ask(request):
     google_api_key=os.getenv("GOOGLE_API_KEY")
     if not google_api_key:
@@ -84,6 +90,12 @@ def ask(request):
     user_message = request.POST.get("message", "").strip()
     if not user_message:
         return JsonResponse({"reply": ""})
+
+    if len(user_message) > 2000:
+        return JsonResponse(
+            {"reply": "That is far too long. Be concise."},
+            status=400
+        )
 
     # ---- Session history (JSON-serializable only) ----
     history = request.session.get("chat_history") #, [])
@@ -131,7 +143,6 @@ def ask(request):
         elif msg["role"] == "assistant":
             messages.append(AIMessage(content=msg["content"]))
 
-
     # ---- Call Gemini ----
     llm = ChatGoogleGenerativeAI(
         model="gemini-2.5-pro",
@@ -142,7 +153,8 @@ def ask(request):
     try:
         response = llm.invoke(messages)
     except Exception as e:
-        return JsonResponse({"error": str(e)}, status=500)
+        logger.exception("Gemini call failed")
+        return JsonResponse({"error": "Zoey is dissatisfied."}, status=500)
 
     # Append assistant response
     history.append({

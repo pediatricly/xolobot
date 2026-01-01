@@ -98,7 +98,7 @@ def ask(request):
         )
 
     # ---- Session history (JSON-serializable only) ----
-    history = request.session.get("chat_history") #, [])
+    history = request.session.get("chat_history", [])
     prompt_version = request.session.get("system_prompt_version")
 
     # Initialize system prompt ONCE
@@ -116,6 +116,13 @@ def ask(request):
         "role": "user",
         "content": user_message
     })
+
+    # Keep system prompt + last N messages
+    if len(history) > MAX_MESSAGES + 1:
+        history = [history[0]] + history[-MAX_MESSAGES:]
+
+    # Save back to session
+    request.session["chat_history"] = history
 
     # ---- Convert session history → LangChain messages ----
     messages = []

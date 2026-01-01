@@ -74,6 +74,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+RATELIMIT_IP_META_KEY = "HTTP_X_FORWARDED_FOR"
+
 ROOT_URLCONF = 'chatbot_site.urls'
 
 TEMPLATES = [

@@ -78,7 +78,7 @@ def index(request):
     return render(request, "chatbot/index.html")
 
 @csrf_protect 
-#@ratelimit(key='ip', rate='10/m', block=True)
+@ratelimit(key='ip', rate='10/m', block=True)
 def ask(request):
     #return JsonResponse({"reply" : "ask() reached"})
 

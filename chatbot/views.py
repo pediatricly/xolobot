@@ -80,6 +80,8 @@ def index(request):
 @csrf_protect 
 @ratelimit(key='ip', rate='10/m', block=True)
 def ask(request):
+    return JsonResponse({"reply" : "ask() reached"})
+
     google_api_key=os.getenv("GOOGLE_API_KEY")
     if not google_api_key:
         raise RuntimeError("GOOGLE_API_KEY not available in service env")

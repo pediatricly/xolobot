@@ -84,7 +84,7 @@ def ask(request):
     # handle rate limiting without building a 429 error
     if getattr(request, "limited", False):
         return JsonResponse(
-            {"reply": "Zoey has decided you’ve spoken enough."},
+            {"reply": "You have exhausted Zoey's patience with your questions. Try again later."},
             status=429
         )
     google_api_key=os.getenv("GOOGLE_API_KEY")
@@ -100,7 +100,7 @@ def ask(request):
 
     if len(user_message) > 2000:
         return JsonResponse(
-            {"reply": "That is far too long. Be concise."},
+            {"reply": "Brevity is the soul of wit. Zoey has already lost interest in your question."},
             status=400
         )
 

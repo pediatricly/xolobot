@@ -27,6 +27,11 @@ body {
     object-fit: cover;
 }
 
+.header-text {
+    display: flex;
+    flex-direction: column;
+}
+
 h1 {
     margin: 0;
     font-size: 1.8rem;

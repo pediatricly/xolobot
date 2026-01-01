@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-w8nqvzn7bj7iamr#flulq@@0%=%*-rv9brr2a(b2-_+w4^9!2m
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["zoey.pediatricly.com"]
+ALLOWED_HOSTS = ["zoey.pediatricly.com", '35.224.213.225']
 CSRF_TRUSTED_ORIGINS = [
     "https://zoey.pediatricly.com",
 ]

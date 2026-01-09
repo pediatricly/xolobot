@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+# Load environment variables
+from dotenv import load_dotenv
+load_dotenv()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +31,7 @@ if not SECRET_KEY:
     raise RuntimeError("DJANGO_SECRET_KEY not set")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["zoey.pediatricly.com", '35.224.213.225']
 CSRF_TRUSTED_ORIGINS = [
@@ -151,10 +155,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# Load environment variables
-from dotenv import load_dotenv
-load_dotenv()
 
 # Static files
 STATIC_URL = "/static/"
